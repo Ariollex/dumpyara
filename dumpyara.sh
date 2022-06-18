@@ -238,25 +238,21 @@ if [[ -n $GIT_OAUTH_TOKEN ]]; then
 
     curl -s -X POST -H "Authorization: token ${GIT_OAUTH_TOKEN}" -d '{ "name": "'"$repo"'" }' "https://api.github.com/orgs/${ORG}/repos" #create new repo
     curl -s -X PUT -H "Authorization: token ${GIT_OAUTH_TOKEN}" -H "Accept: application/vnd.github.mercy-preview+json" -d '{ "names": ["'"$manufacturer"'","'"$platform"'","'"$top_codename"'"]}' "https://api.github.com/repos/${ORG}/${repo}/topics"
+
     git remote add origin https://github.com/$ORG/"${repo,,}".git
-    git commit -asm "Add ${description}"
-    git push https://"$GIT_OAUTH_TOKEN"@github.com/$ORG/"${repo,,}".git "$branch" ||
-        (
-            git update-ref -d HEAD
-            git reset system/ vendor/
-            git checkout -b "$branch"
-            git commit -asm "Add extras for ${description}"
-            git push https://"$GIT_OAUTH_TOKEN"@github.com/$ORG/"${repo,,}".git "$branch"
-            git add vendor/
-            git commit -asm "Add vendor for ${description}"
-            git push https://"$GIT_OAUTH_TOKEN"@github.com/$ORG/"${repo,,}".git "$branch"
-            git add system/system/app/ system/system/priv-app/ || git add system/app/ system/priv-app/
-            git commit -asm "Add apps for ${description}"
-            git push https://"$GIT_OAUTH_TOKEN"@github.com/$ORG/"${repo,,}".git "$branch"
-            git add system/
-            git commit -asm "Add system for ${description}"
-            git push https://"$GIT_OAUTH_TOKEN"@github.com/$ORG/"${repo,,}".git "$branch"
-        )
+    git reset system/ vendor/
+    git checkout -b "$branch"
+    git commit -asm "Add extras for ${description}"
+    git push https://"$GIT_OAUTH_TOKEN"@github.com/$ORG/"${repo,,}".git "$branch"
+    git add vendor/
+    git commit -asm "Add vendor for ${description}"
+    git push https://"$GIT_OAUTH_TOKEN"@github.com/$ORG/"${repo,,}".git "$branch"
+    git add system/system/app/ system/system/priv-app/ || git add system/app/ system/priv-app/
+    git commit -asm "Add apps for ${description}"
+    git push https://"$GIT_OAUTH_TOKEN"@github.com/$ORG/"${repo,,}".git "$branch"
+    git add system/
+    git commit -asm "Add system for ${description}"
+    git push https://"$GIT_OAUTH_TOKEN"@github.com/$ORG/"${repo,,}".git "$branch"
 else
     echo "Dump done locally."
     exit 1
